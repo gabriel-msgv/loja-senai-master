@@ -1,9 +1,11 @@
-import { Injectable } from "@nestjs/common";
-import { UpsertDTO } from "./dto/upsert.dto";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { UpsertCustomersDTO } from "./dto/upsert-customers.dto";
+import { findIndex } from "rxjs";
 
 @Injectable()
 export class CustomersService {
    private customers: Array<any>;
+    static delete: any;
    // método especial - ele é chamado na criação
    constructor() {
      this.customers = [
@@ -20,7 +22,7 @@ export class CustomersService {
     return this.customers;
    }
 
-   create(customer: UpsertDTO) {
+   create(customer: UpsertCustomersDTO) {
      let id = 1;
      if(this.customers.length != 0) {
         id = this.customers[this.customers.length - 1].id + 1
@@ -34,4 +36,33 @@ export class CustomersService {
         "message": "Salvo com sucesso"
      };
    }
+
+   delete(id: number) {
+      const position = this.customers.findIndex((customer) => customer.id == id);
+      if (position == -1) {
+         throw new NotFoundException('Cliente não encontrado');
+      }
+      this.customers.splice(position, 1);
+      
+      return {
+         "mesage": "Deletado com sucesso!"
+      }
+   }
+
+   update(id: number, product: UpsertProductDTO) {
+           // [ 1, 2, 3, 4 ]
+           const index = this.products.findIndex((p) => p.id == id);
+           if(index == -1) {
+               throw new NotFoundException('Produto não encontrado!')
+           }
+           this.products[index] = {
+               'id': this.products[index].id,
+               // spread
+               ...product
+           }
+           
+           return {
+               "message": "Customer Atualizado!"
+           };
+
 }

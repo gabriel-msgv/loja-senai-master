@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import { CustomersService } from "./customers.service";
-import { UpsertDTO } from "./dto/upsert.dto"
+import { UpsertCustomersDTO } from "./dto/upsert-customers.dto"
 // @ -> é um decorator
 // Eles são uma 
 // função (ou método) que modificam 
@@ -18,7 +18,17 @@ export class CustomersController {
     }
 
     @Post()
-    create(@Body() bodyCustomer: UpsertDTO) {
+    create(@Body() bodyCustomer: UpsertCustomersDTO) {
         return this.customersService.create(bodyCustomer);
+    }
+
+    @Delete(':id')
+    delete(@Param('id') customersID: number) {
+            return this.customersService.delete(customersID);
+    }
+
+    @Put(':id')
+    update(@Param('id') customerId: number, @Body() updateCustomers: UpsertCustomersDTO) {
+        return this.customersService.update(customerId, updateCustomers);
     }
 }
