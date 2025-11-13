@@ -1,11 +1,17 @@
 import { Injectable } from "@nestjs/common";
-import { UpsertDTO } from "./dto/upsert.dto";
+import { UpsertCustomersDTO } from "./dto/upsert-customer.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Customers } from "./customers.entity";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class CustomersService {
    private customers: Array<any>;
    // método especial - ele é chamado na criação
-   constructor() {
+   constructor(
+      @InjectRepository(Customers)
+      private customersRepository: Repository<Customers>
+   ) {
      this.customers = [
         {
             "id": 1,
@@ -17,21 +23,15 @@ export class CustomersService {
    }
 
    get() {
-    return this.customers;
+    return this.customersRepository.find();
    }
 
-   create(customer: UpsertDTO) {
-     let id = 1;
-     if(this.customers.length != 0) {
-        id = this.customers[this.customers.length - 1].id + 1
-     }
-     this.customers.push({
-      "id": id,
-      ...customer
-     });
-
-     return {
-        "message": "Salvo com sucesso"
-     };
-   }
+   async create(customer: UpsertCustomersDTO) {
+           const newProduct = this.customersRepository.create(customer);
+           await this.customersRepository.save(newProduct);
+   
+           return {
+               "message": "Cliente criado com sucesso!"
+           };
+       }
 }

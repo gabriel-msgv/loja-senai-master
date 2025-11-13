@@ -1,4 +1,5 @@
 import { Product } from './src/products/products.entity';
+import { Customers } from 'src/customers/customers.entity';
 import { DataSource } from 'typeorm';
 
 export default new DataSource({

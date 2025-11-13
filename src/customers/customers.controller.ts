@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from "@nestjs/common";
 import { CustomersService } from "./customers.service";
-import { UpsertDTO } from "./dto/upsert.dto"
+import { UpsertCustomersDTO } from "./dto/upsert-customer.dto"
 // @ -> é um decorator
 // Eles são uma 
 // função (ou método) que modificam 
@@ -17,8 +17,8 @@ export class CustomersController {
         }
     }
 
-    @Post()
-    create(@Body() bodyCustomer: UpsertDTO) {
-        return this.customersService.create(bodyCustomer);
+    @Post('/')
+    create(@Body() bodyCustomers: UpsertCustomersDTO) {
+        return this.customersService.create(bodyCustomers);
     }
 }
