@@ -5,6 +5,7 @@ import { ProductsModule } from './products/products.module';
 import { CustomersModule } from './customers/customers.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EmployeeModule } from './employee/employee.module';
+import { VendaModule } from './venda/venda.module';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { EmployeeModule } from './employee/employee.module';
       synchronize: false,  // importante! false em produção
       logging: true,
     }),
-    ProductsModule, CustomersModule, EmployeeModule],
+    ProductsModule, CustomersModule, EmployeeModule, VendaModule],
   controllers: [AppController],
   providers: [AppService],
 })
