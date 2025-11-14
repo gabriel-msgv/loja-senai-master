@@ -1,6 +1,7 @@
 import { Product } from './src/products/products.entity';
 import { Customers } from './src/customers/customers.entity';
 import { DataSource } from 'typeorm';
+import { Employee } from './src/employee/entities/employee.entity';
 
 export default new DataSource({
   type: 'mysql',
@@ -9,6 +10,6 @@ export default new DataSource({
   username: 'root',
   password: '',
   database: 'curso',
-  entities: [Product, Customers],
+  entities: [Product, Customers, Employee],
   migrations: ['dist/migrations/*.js'],
 });

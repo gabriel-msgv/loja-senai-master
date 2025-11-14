@@ -1,26 +1,66 @@
-import { Injectable } from '@nestjs/common';
-import { CreateEmployeeDto } from './dto/create-employee.dto';
-import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { UpsertEmployeeDTO } from './dto/upsert-employee.dto';
+import { Employee } from './entities/employee.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class EmployeeService {
-  create(createEmployeeDto: CreateEmployeeDto) {
-    return 'This action adds a new employee';
+  employee: Array<any>;
+
+  constructor(
+    @InjectRepository(Employee)
+    private employeeRepository: Repository<Employee>
+  ) {
+    this.employee = [
+      {
+        "id": 1,
+        "name": "Gabriel",
+        "codigo": "0001"
+      }
+    ]
+  }
+
+  async create(createEmployee: UpsertEmployeeDTO) {
+      const newEmployee = this.employeeRepository.create(createEmployee);
+      await this.employeeRepository.save(newEmployee);
+
+      return {
+        "message": "Funcionário criado com sucesso!"
+      }
   }
 
   findAll() {
-    return `This action returns all employee`;
+    return this.employeeRepository.find();
   }
 
   findOne(id: number) {
     return `This action returns a #${id} employee`;
   }
 
-  update(id: number, updateEmployeeDto: UpdateEmployeeDto) {
-    return `This action updates a #${id} employee`;
+  async update(id: number, employee: UpsertEmployeeDTO) {
+    const findEmployee = await this.employeeRepository.findOne({
+      where: {id}
+    })
+
+    if(!findEmployee) {
+      throw new NotFoundException('Funcionário não encontrado');
+    }
+
+    await this.employeeRepository.update(id, employee);
+
+      return {
+        "message": "Funcionário atualizado!"
+      }
+
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} employee`;
+  async delete(id: number) {
+    await this.employeeRepository.delete(id);
+
+    return {
+      "message": "Funcionário excluido!"
+    }
   }
+
 }
