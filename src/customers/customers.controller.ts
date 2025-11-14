@@ -11,9 +11,9 @@ export class CustomersController {
     constructor(private readonly customersService: CustomersService) {}
     
     @Get('/')
-    showAll() {
+    async showAll() {
         return {
-            'customers': this.customersService.get()
+            'customers': await this.customersService.get()
         }
     }
 
