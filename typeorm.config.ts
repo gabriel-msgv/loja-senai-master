@@ -1,5 +1,5 @@
 import { Product } from './src/products/products.entity';
-import { Customers } from 'src/customers/customers.entity';
+import { Customers } from './src/customers/customers.entity';
 import { DataSource } from 'typeorm';
 
 export default new DataSource({
@@ -9,6 +9,6 @@ export default new DataSource({
   username: 'root',
   password: '',
   database: 'curso',
-  entities: [Product],
+  entities: [Product, Customers],
   migrations: ['dist/migrations/*.js'],
 });
